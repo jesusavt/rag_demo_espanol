@@ -28,7 +28,7 @@ def buscar_en_documentos(pregunta: str) -> str:
     print(f"\n[🔍 TOOL] Ejecutando búsqueda semántica para: '{pregunta}'")
     
     # Extraemos los 3 fragmentos más similares matemáticamente a la pregunta
-    resultados = vector_store.similarity_search(pregunta, k=3)
+    resultados = vector_store.similarity_search(pregunta, k=10)
     
     if not resultados:
         return "No se encontró información relevante en la base de datos."
@@ -42,6 +42,9 @@ def buscar_en_documentos(pregunta: str) -> str:
         textos_encontrados.append(f"--- Fragmento {i} ---\nSección: {metadatos}\nContenido: {texto}\n")
         
     return "\n".join(textos_encontrados)
+
+if not cliente_qdrant.collection_exists(COLECCION_NOMBRE):
+    print(f"⚠️ Alerta: La colección '{COLECCION_NOMBRE}' no existe. Ejecuta primero 04_hierarchical_indexing.py")
 
 if __name__ == "__main__":
     # Prueba manual directa de la herramienta sin usar el Agente aún
